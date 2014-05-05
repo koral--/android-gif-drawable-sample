@@ -1,0 +1,2 @@
+#required by android-gif-drawable
+-keep public class pl.droidsonroids.gif.GifIOException{*;}

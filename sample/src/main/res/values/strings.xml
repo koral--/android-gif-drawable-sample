@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">android-gif-drawable sample</string>
+    <string name="about_text" tools:ignore="TypographyDashes">This is a sample of android-gif-drawable Library:
+        https://github.com/koral--/android-gif-drawable</string>
+</resources>

@@ -3,12 +3,12 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 android {
-    compileSdkVersion 'android-L'
+    compileSdkVersion 20
     buildToolsVersion "20"
 
     defaultConfig {
-        minSdkVersion 'L'
-        targetSdkVersion 'L'
+        minSdkVersion 9
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }

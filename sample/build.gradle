@@ -3,12 +3,12 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.0.3"
+    compileSdkVersion 'android-L'
+    buildToolsVersion "20"
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 19
+        minSdkVersion 'L'
+        targetSdkVersion 'L'
         versionCode 1
         versionName "1.0"
     }
@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:19.+'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.0.8-SNAPSHOT'
+    compile 'com.android.support:appcompat-v7:20.+'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.0.12-SNAPSHOT'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

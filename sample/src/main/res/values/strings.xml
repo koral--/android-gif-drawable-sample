@@ -3,4 +3,5 @@
     <string name="app_name">android-gif-drawable sample</string>
     <string name="about_text" tools:ignore="TypographyDashes">This is a sample of android-gif-drawable Library:
         https://github.com/koral--/android-gif-drawable\nUsed icons are public domain, created by Dave Johnston.</string>
+    <string name="compound_text">This is a TextView with animated compound drawables</string>
 </resources>

@@ -34,6 +34,8 @@ public class MainActivity extends FragmentActivity {
                 case 0:
                     return new GifSourcesFragment();
                 case 1:
+                    return new GifTextViewFragment();
+                case 2:
                     return new AboutFragment();
                 default:
                     throw new IndexOutOfBoundsException("Invalid page index");

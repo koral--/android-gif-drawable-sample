@@ -13,6 +13,7 @@
     </string-array>
     <string-array name="pages">
         <item>GIFs loaded from various sources</item>
+        <item>GIFs as compound drawables</item>
         <item>About</item>
     </string-array>
 </resources>

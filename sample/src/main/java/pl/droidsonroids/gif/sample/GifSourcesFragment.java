@@ -42,9 +42,9 @@ public class GifSourcesFragment extends ListFragment {
         mByteBuffer.put(gifBytes);
     }
 
-    private byte[] getBytesFromAssets(String fileanme) {
+    private byte[] getBytesFromAssets(String filename) {
         try {
-            final AssetFileDescriptor assetFileDescriptor = getResources().getAssets().openFd(fileanme);
+            final AssetFileDescriptor assetFileDescriptor = getResources().getAssets().openFd(filename);
             FileInputStream input = assetFileDescriptor.createInputStream();
             byte[] buf = new byte[(int) assetFileDescriptor.getDeclaredLength()];
             input.read(buf);
@@ -55,10 +55,10 @@ public class GifSourcesFragment extends ListFragment {
         }
     }
 
-    private File getFileFromAssets(String fileanme) {
+    private File getFileFromAssets(String filename) {
         try {
-            File file = new File(getActivity().getCacheDir(), fileanme);
-            final AssetFileDescriptor assetFileDescriptor = getResources().getAssets().openFd(fileanme);
+            File file = new File(getActivity().getCacheDir(), filename);
+            final AssetFileDescriptor assetFileDescriptor = getResources().getAssets().openFd(filename);
             FileInputStream input = assetFileDescriptor.createInputStream();
             FileOutputStream output = new FileOutputStream(file);
             byte[] buf = new byte[(int) assetFileDescriptor.getDeclaredLength()];
@@ -98,8 +98,9 @@ public class GifSourcesFragment extends ListFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null)
+            if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.source_item, parent, false);
+            }
             ((TextView) convertView.findViewById(R.id.desc_tv)).setText(mDescriptions[position]);
             GifImageView gifImageView = (GifImageView) convertView.findViewById(R.id.giv);
             GifDrawable gd;

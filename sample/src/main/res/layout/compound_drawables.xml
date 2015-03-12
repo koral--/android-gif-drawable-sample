@@ -10,5 +10,5 @@
     android:drawableBottom="@drawable/anim_flag_iceland"
     android:padding="10dp"
     android:text="@string/compound_text"
-    android:layout_width="match_parent"                                  
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"/>

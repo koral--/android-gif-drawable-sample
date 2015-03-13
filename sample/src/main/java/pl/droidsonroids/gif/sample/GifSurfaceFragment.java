@@ -9,6 +9,6 @@ import android.view.ViewGroup;
 public class GifSurfaceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.surface, container, false);
+        return inflater.inflate(R.layout.texture, container, false);
     }
 }

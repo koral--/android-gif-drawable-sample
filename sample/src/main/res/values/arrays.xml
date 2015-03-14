@@ -14,7 +14,7 @@
     <string-array name="pages">
         <item>GIFs loaded from various sources</item>
         <item>GIFs as compound drawables</item>
-        <item>GIFs in surface and background</item>
+        <item>GIF in TextureView vs ImageView</item>
         <item>About</item>
     </string-array>
 </resources>

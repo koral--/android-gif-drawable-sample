@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <pl.droidsonroids.gif.GifTextureView
+        app:freezesAnimation="true"
         android:id="@+id/gifTextureView"
         android:layout_weight="1"
         app:src="@drawable/anim_flag_iceland"

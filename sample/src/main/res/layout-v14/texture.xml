@@ -5,18 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <pl.droidsonroids.gif.GifTextureView
-        app:freezesAnimation="true"
-        android:id="@+id/gifTextureView"
-        android:layout_weight="1"
-        app:src="@drawable/anim_flag_iceland"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
+    <!--<pl.droidsonroids.gif.GifTextureView-->
+        <!--app:freezesAnimation="true"-->
+        <!--android:id="@+id/gifTextureView"-->
+        <!--android:layout_weight="1"-->
+        <!--app:src="@drawable/anim_flag_iceland"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp" />-->
 
     <pl.droidsonroids.gif.GifImageView
+        app:freezesAnimation="true"
         android:id="@+id/gifImageView"
         android:layout_weight="1"
-        android:src="@drawable/anim_flag_iceland"
+        android:src="@drawable/canvas_bgnd"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 </LinearLayout>

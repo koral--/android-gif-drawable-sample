@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/a"
         android:text="@string/gif_texture_view_stub"
         android:layout_weight="1"
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@
         <item>AssetFileDescriptor</item>
         <item>ByteBuffer</item>
         <item>Uri</item>
+        <item>InputStream</item>
     </string-array>
     <string-array name="pages">
         <item>GIFs loaded from various sources</item>

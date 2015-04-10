@@ -1,6 +1,7 @@
 package pl.droidsonroids.gif.sample;
 
 import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -132,6 +133,9 @@ public class GifSourcesFragment extends ListFragment {
                         break;
                     case 8: //Uri
                         gd = new GifDrawable(getContext().getContentResolver(), Uri.parse("file:///" + mFileForUri.getAbsolutePath()));
+                        break;
+                    case 9: //InputStream
+                        gd = new GifDrawable(getContext().getResources().getAssets().open("Animated-Flag-Delaware.gif", AssetManager.ACCESS_RANDOM));
                         break;
                     default:
                         throw new IndexOutOfBoundsException("Invalid source index");

@@ -29,3 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.0'
     compile project(':android-gif-drawable')
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

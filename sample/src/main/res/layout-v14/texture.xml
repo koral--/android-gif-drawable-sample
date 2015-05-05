@@ -3,20 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F00"
     android:orientation="vertical">
 
     <pl.droidsonroids.gif.GifTextureView
+        android:background="@drawable/ic_launcher"
+        app:isOpaque="false"
+        android:onClick="test"
         app:freezesAnimation="true"
         android:id="@+id/gifTextureView"
         android:layout_weight="1"
-        app:gifSource="@drawable/anim_flag_iceland"
+        app:gifSource="@drawable/ef"
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifImageView"
-        android:layout_weight="1"
-        android:src="@drawable/anim_flag_iceland"
-        android:layout_width="match_parent"
-        android:layout_height="0dp" />
+    <!--<pl.droidsonroids.gif.GifImageView-->
+        <!--android:background="@drawable/ic_launcher"-->
+        <!--android:onClick="test"-->
+        <!--app:freezesAnimation="true"-->
+        <!--android:id="@+id/gifImageView"-->
+        <!--android:layout_weight="1"-->
+        <!--android:src="@drawable/ef"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp" />-->
 </LinearLayout>

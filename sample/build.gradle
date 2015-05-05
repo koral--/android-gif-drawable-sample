@@ -28,6 +28,7 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':android-gif-drawable')
+    //compile 'pl.droidsonroids.gif:android-gif-drawable:+'
 }
 
 task wrapper(type: Wrapper) {

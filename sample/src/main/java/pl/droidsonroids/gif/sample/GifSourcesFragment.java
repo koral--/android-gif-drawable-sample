@@ -19,9 +19,6 @@ import java.nio.ByteBuffer;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-import pl.droidsonroids.gif.GifTextView;
-import pl.droidsonroids.gif.GifTextureView;
-import pl.droidsonroids.gif.InputSource;
 
 /**
  * Fragment with various GIF sources examples
@@ -51,8 +48,11 @@ public class GifSourcesFragment extends ListFragment {
             final AssetFileDescriptor assetFileDescriptor = getResources().getAssets().openFd(filename);
             FileInputStream input = assetFileDescriptor.createInputStream();
             byte[] buf = new byte[(int) assetFileDescriptor.getDeclaredLength()];
-            input.read(buf);
+            final int readBytes = input.read(buf);
             input.close();
+            if (readBytes != buf.length) {
+                throw new IOException("Incorrect asset length");
+            }
             return buf;
         } catch (IOException ex) {
             throw new RuntimeException(ex);

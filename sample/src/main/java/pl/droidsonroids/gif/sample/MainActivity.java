@@ -30,16 +30,6 @@ public class MainActivity extends FragmentActivity {
         ((ViewPager) findViewById(R.id.main_pager)).setAdapter(new MainPagerAdapter(this));
     }
 
-    static float x = 0.5f;
-
-    public void test(View view) {
-        GifImageView tv = (GifImageView) view;
-        GifDrawable gifDrawable = (GifDrawable) tv.getDrawable();
-        Bitmap currentFrame = gifDrawable.getCurrentFrame();
-        Bitmap scaledFrame = Bitmap.createScaledBitmap(currentFrame, 800, 600, true);
-        tv.setImageDrawable(new BitmapDrawable(getResources(), currentFrame));
-    }
-
     static class MainPagerAdapter extends FragmentStatePagerAdapter {
         private final String[] mPageTitles;
 

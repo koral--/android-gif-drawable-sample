@@ -16,8 +16,6 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((ViewPager) findViewById(R.id.main_pager)).setAdapter(new MainPagerAdapter(this));
@@ -41,6 +39,8 @@ public class MainActivity extends FragmentActivity {
                 case 2:
                     return new GifTextureFragment();
                 case 3:
+                    return new ImageSpanFragment();
+                case 4:
                     return new AboutFragment();
                 default:
                     throw new IndexOutOfBoundsException("Invalid page index");

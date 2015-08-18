@@ -1,3 +1,3 @@
 [submodule "android-gif-drawable"]
 	path = android-gif-drawable
-	url = git@github.com:koral--/android-gif-drawable.git
+	url = ssh://git@github.com:koral--/android-gif-drawable.git

@@ -13,12 +13,12 @@ android:
     - extra-android-m2repository
 
 before_install:
-#  - wget http://dl.google.com/android/ndk/android-ndk-$NDK_VERSION-linux-x86_64.bin
-#  - chmod +x android-ndk-$NDK_VERSION-linux-x86_64.bin
-#  - ./android-ndk-$NDK_VERSION-linux-x86_64.bin | egrep -v ^Extracting
-#  - export ANDROID_NDK_HOME=`pwd`/android-ndk-$NDK_VERSION
-#  - export PATH=${PATH}:${ANDROID_NDK_HOME}
+    - android update sdk --all --no-ui --force --filter build-tools-23.0.0
+  - wget http://dl.google.com/android/ndk/android-ndk-$NDK_VERSION-linux-x86_64.bin
+  - chmod +x android-ndk-$NDK_VERSION-linux-x86_64.bin
+  - ./android-ndk-$NDK_VERSION-linux-x86_64.bin | egrep -v ^Extracting
+  - export ANDROID_NDK_HOME=`pwd`/android-ndk-$NDK_VERSION
+  - export PATH=${PATH}:${ANDROID_NDK_HOME}
 
 script:
-  - android update sdk --all --no-ui --force --filter build-tools-23.0.0
-#  - ./gradlew build --info
+  - ./gradlew build --info

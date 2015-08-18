@@ -20,5 +20,5 @@ before_install:
 #  - export PATH=${PATH}:${ANDROID_NDK_HOME}
 
 script:
-  - android list sdk --no-ui
+  - android list sdk --no-ui --all
 #  - ./gradlew build --info

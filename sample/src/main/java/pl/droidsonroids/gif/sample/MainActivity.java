@@ -40,6 +40,8 @@ public class MainActivity extends FragmentActivity {
                 case 3:
                     return new ImageSpanFragment();
                 case 4:
+                    return new AnimationControlFragment();
+                case 5:
                     return new AboutFragment();
                 default:
                     throw new IndexOutOfBoundsException("Invalid page index");

@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    compile 'com.android.support:design:23.0.0'
     compile 'com.android.support:appcompat-v7:23.0.0'
     compile project(':android-gif-drawable')
     //compile 'pl.droidsonroids.gif:android-gif-drawable:+'

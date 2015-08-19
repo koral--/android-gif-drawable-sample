@@ -17,6 +17,7 @@
         <item>GIFs as compound drawables</item>
         <item>GIF in TextureView vs ImageView</item>
         <item>GIF in ImageSpan</item>
+        <item>Basic animation control</item>
         <item>About</item>
     </string-array>
 </resources>

@@ -12,7 +12,7 @@ import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class AnimationControlFragment extends Fragment implements View.OnClickListener {
+public class AnimationControlFragment extends Fragment implements View.OnClickListener, AnimationListener {
 
 	private GifDrawable gifDrawable;
 	private ToggleButton toggleButton;
@@ -26,12 +26,6 @@ public class AnimationControlFragment extends Fragment implements View.OnClickLi
 		toggleButton.setOnClickListener(this);
 		gifDrawable = (GifDrawable) gifImageView.getDrawable();
 
-		gifDrawable.addAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationCompleted() {
-				Snackbar.make(view, R.string.animation_loop_completed, Snackbar.LENGTH_SHORT).show();
-			}
-		});
 		resetAnimation();
 		return view;
 	}
@@ -47,6 +41,7 @@ public class AnimationControlFragment extends Fragment implements View.OnClickLi
 
 	private void resetAnimation() {
 		gifDrawable.stop();
+		gifDrawable.setLoopCount(4);
 		gifDrawable.seekToFrameAndGet(5);
 		toggleButton.setChecked(false);
 	}
@@ -56,6 +51,26 @@ public class AnimationControlFragment extends Fragment implements View.OnClickLi
 			gifDrawable.stop();
 		} else {
 			gifDrawable.start();
+		}
+	}
+
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		gifDrawable.addAnimationListener(this);
+	}
+
+	@Override
+	public void onDestroyView() {
+		gifDrawable.removeAnimationListener(this);
+		super.onDestroyView();
+	}
+
+	@Override
+	public void onAnimationCompleted(final int loopNumber) {
+		final View view = getView();
+		if (view != null) {
+			Snackbar.make(view, getString(R.string.animation_loop_completed, loopNumber), Snackbar.LENGTH_SHORT).show();
 		}
 	}
 }

@@ -12,7 +12,8 @@ android:
     - extra-android-m2repository
 
 before_install:
-  - android list sdk --all --no-ui
+  - echo y|android update sdk --all --no-ui --force --filter 1
+  - android list sdk --no-ui --all
   - echo y|android update sdk --all --no-ui --force --filter build-tools-23.0.2
   - wget http://dl.google.com/android/ndk/android-ndk-$NDK_VERSION-linux-x86_64.bin
   - chmod +x android-ndk-$NDK_VERSION-linux-x86_64.bin

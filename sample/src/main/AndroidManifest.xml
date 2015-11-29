@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pl.droidsonroids.gif.sample">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:theme="@style/Theme.AppCompat"
         android:hardwareAccelerated="true"

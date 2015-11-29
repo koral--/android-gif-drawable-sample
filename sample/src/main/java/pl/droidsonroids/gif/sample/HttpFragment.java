@@ -1,6 +1,5 @@
 package pl.droidsonroids.gif.sample;
 
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,10 +23,10 @@ import pl.droidsonroids.gif.InputSource;
 
 public class HttpFragment extends Fragment implements Callback, View.OnClickListener {
 
-    public static final String URL = "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif";
-    private final OkHttpClient okHttpClient = new OkHttpClient();
-    private GifTextureView gifTextureView;
-    private Snackbar snackbar;
+    private static final String URL = "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif";
+    private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private GifTextureView mGifTextureView;
+    private Snackbar mSnackbar;
 
     @Nullable
     @Override
@@ -36,30 +35,30 @@ public class HttpFragment extends Fragment implements Callback, View.OnClickList
             Snackbar.make(container, R.string.gif_texture_view_stub_api_level, Snackbar.LENGTH_INDEFINITE).show();
             return null;
         } else {
-            gifTextureView = (GifTextureView) inflater.inflate(R.layout.http, container, false);
+            mGifTextureView = (GifTextureView) inflater.inflate(R.layout.http, container, false);
             loadGif();
-            return gifTextureView;
+            return mGifTextureView;
         }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && !gifTextureView.isHardwareAccelerated()) {
-            Snackbar.make(gifTextureView, R.string.gif_texture_view_stub_acceleration, Snackbar.LENGTH_INDEFINITE).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && !mGifTextureView.isHardwareAccelerated()) {
+            Snackbar.make(mGifTextureView, R.string.gif_texture_view_stub_acceleration, Snackbar.LENGTH_INDEFINITE).show();
         }
     }
 
     private void loadGif() {
-        final Call call = okHttpClient.newCall(new Request.Builder().url(URL).build());
+        final Call call = mOkHttpClient.newCall(new Request.Builder().url(URL).build());
         call.enqueue(this);
     }
 
     @Override
     public void onFailure(Request request, IOException e) {
-        gifTextureView.setOnClickListener(this);
-        snackbar = Snackbar.make(gifTextureView, getString(R.string.gif_texture_view_loading_failed, e.getMessage()), Snackbar.LENGTH_INDEFINITE);
-        snackbar.show();
+        mGifTextureView.setOnClickListener(this);
+        mSnackbar = Snackbar.make(mGifTextureView, getString(R.string.gif_texture_view_loading_failed, e.getMessage()), Snackbar.LENGTH_INDEFINITE);
+        mSnackbar.show();
     }
 
     @Override
@@ -69,13 +68,13 @@ public class HttpFragment extends Fragment implements Callback, View.OnClickList
             return;
         }
         final ResponseBody body = response.body();
-        gifTextureView.setInputSource(new InputSource.ByteArraySource(body.bytes()));
-        gifTextureView.setOnClickListener(null);
+        mGifTextureView.setInputSource(new InputSource.ByteArraySource(body.bytes()));
+        mGifTextureView.setOnClickListener(null);
     }
 
     @Override
     public void onClick(View v) {
         loadGif();
-        snackbar.dismiss();
+        mSnackbar.dismiss();
     }
 }

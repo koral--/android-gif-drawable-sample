@@ -18,6 +18,7 @@
         <item>GIF in TextureView vs ImageView</item>
         <item>GIF in ImageSpan</item>
         <item>Basic animation control</item>
+        <item>GifTextureView and HTTP</item>
         <item>About</item>
     </string-array>
 </resources>

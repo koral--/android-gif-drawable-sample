@@ -42,6 +42,8 @@ public class MainActivity extends FragmentActivity {
                 case 4:
                     return new AnimationControlFragment();
                 case 5:
+                    return new HttpFragment();
+                case 6:
                     return new AboutFragment();
                 default:
                     throw new IndexOutOfBoundsException("Invalid page index");

@@ -1,5 +1,6 @@
 package pl.droidsonroids.gif.sample;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import pl.droidsonroids.gif.GifTextureView;
 import pl.droidsonroids.gif.InputSource;
 
-public class HttpFragment extends Fragment implements Callback, View.OnClickListener {
+public class HttpFragment extends Fragment implements View.OnClickListener {
 
     private static final String URL = "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif";
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -49,27 +50,28 @@ public class HttpFragment extends Fragment implements Callback, View.OnClickList
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void loadGif() {
         final Call call = mOkHttpClient.newCall(new Request.Builder().url(URL).build());
-        call.enqueue(this);
-    }
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                mGifTextureView.setOnClickListener(HttpFragment.this);
+                mSnackbar = Snackbar.make(mGifTextureView, getString(R.string.gif_texture_view_loading_failed, e.getMessage()), Snackbar.LENGTH_INDEFINITE);
+                mSnackbar.show();
+            }
 
-    @Override
-    public void onFailure(Request request, IOException e) {
-        mGifTextureView.setOnClickListener(this);
-        mSnackbar = Snackbar.make(mGifTextureView, getString(R.string.gif_texture_view_loading_failed, e.getMessage()), Snackbar.LENGTH_INDEFINITE);
-        mSnackbar.show();
-    }
-
-    @Override
-    public void onResponse(Response response) throws IOException {
-        if (!response.isSuccessful()) {
-            onFailure(response.request(), new IOException(response.message()));
-            return;
-        }
-        final ResponseBody body = response.body();
-        mGifTextureView.setInputSource(new InputSource.ByteArraySource(body.bytes()));
-        mGifTextureView.setOnClickListener(null);
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    onFailure(response.request(), new IOException(response.message()));
+                    return;
+                }
+                final ResponseBody body = response.body();
+                mGifTextureView.setInputSource(new InputSource.ByteArraySource(body.bytes()));
+                mGifTextureView.setOnClickListener(null);
+            }
+        });
     }
 
     @Override

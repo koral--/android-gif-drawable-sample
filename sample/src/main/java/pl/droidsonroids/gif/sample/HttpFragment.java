@@ -33,7 +33,9 @@ public class HttpFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            Snackbar.make(container, R.string.gif_texture_view_stub_api_level, Snackbar.LENGTH_INDEFINITE).show();
+            if (container != null) {
+                Snackbar.make(container, R.string.gif_texture_view_stub_api_level, Snackbar.LENGTH_INDEFINITE).show();
+            }
             return null;
         } else {
             mGifTextureView = (GifTextureView) inflater.inflate(R.layout.http, container, false);

@@ -13,7 +13,7 @@
         <item>InputStream</item>
     </string-array>
     <string-array name="pages">
-        <item>GIFs loaded from various sources</item>
+        <item>GIFs loaded from various sources, reused GifDrawables</item>
         <item>GIFs as compound drawables</item>
         <item>GIF in TextureView vs ImageView</item>
         <item>GIF in ImageSpan</item>

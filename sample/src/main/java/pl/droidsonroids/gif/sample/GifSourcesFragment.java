@@ -2,6 +2,7 @@ package pl.droidsonroids.gif.sample;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifDrawableBuilder;
 import pl.droidsonroids.gif.GifImageView;
 
 /**
@@ -33,7 +35,6 @@ public class GifSourcesFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //prepare input sources
         mFileForUri = getFileFromAssets("Animated-Flag-Uruguay.gif");
         mFile = getFileFromAssets("Animated-Flag-Virgin_Islands.gif");
         mFilePath = getFileFromAssets("Animated-Flag-Estonia.gif").getPath();
@@ -97,54 +98,56 @@ public class GifSourcesFragment extends ListFragment {
 
         @Override
         public int getCount() {
-            return mDescriptions.length;
+            return Integer.MAX_VALUE;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
+        public View getView(int position, View convertView, final ViewGroup parent) {
             if (convertView == null) {
                 convertView = mInflater.inflate(R.layout.source_item, parent, false);
             }
+            position %= mDescriptions.length;
             ((TextView) convertView.findViewById(R.id.desc_tv)).setText(mDescriptions[position]);
-            GifImageView gifImageView = (GifImageView) convertView.findViewById(R.id.giv);
-            GifDrawable gd;
+
+            final GifImageView gifImageView = (GifImageView) convertView.findViewById(R.id.giv);
+            final GifDrawable existingDrawable = (GifDrawable) gifImageView.getDrawable();
+            final GifDrawableBuilder builder = new GifDrawableBuilder().with(existingDrawable);
             try {
                 switch (position) {
                     case 0: //asset
-                        gd = new GifDrawable(getContext().getAssets(), "Animated-Flag-Finland.gif");
+                        builder.from(getContext().getAssets(), "Animated-Flag-Finland.gif");
                         break;
                     case 1: //resource
-                        gd = new GifDrawable(getContext().getResources(), R.drawable.anim_flag_england);
+                        builder.from(getContext().getResources(), R.drawable.anim_flag_england);
                         break;
                     case 2: //byte[]
-                        gd = new GifDrawable(mByteArray);
+                        builder.from(mByteArray);
                         break;
                     case 3: //FileDescriptor
-                        gd = new GifDrawable(getContext().getAssets().openFd("Animated-Flag-Greece.gif"));
+                        builder.from(getContext().getAssets().openFd("Animated-Flag-Greece.gif"));
                         break;
                     case 4: //file path
-                        gd = new GifDrawable(mFilePath);
+                        builder.from(mFilePath);
                         break;
                     case 5: //File
-                        gd = new GifDrawable(mFile);
+                        builder.from(mFile);
                         break;
                     case 6: //AssetFileDescriptor
-                        gd = new GifDrawable(getContext().getResources().openRawResourceFd(R.raw.anim_flag_hungary));
+                        builder.from(getContext().getResources().openRawResourceFd(R.raw.anim_flag_hungary));
                         break;
                     case 7: //ByteBuffer
-                        gd = new GifDrawable(mByteBuffer);
+                        builder.from(mByteBuffer);
                         break;
                     case 8: //Uri
-                        gd = new GifDrawable(getContext().getContentResolver(), Uri.parse("file:///" + mFileForUri.getAbsolutePath()));
+                        builder.from(getContext().getContentResolver(), Uri.parse("file:///" + mFileForUri.getAbsolutePath()));
                         break;
                     case 9: //InputStream
-                        gd = new GifDrawable(getContext().getResources().getAssets().open("Animated-Flag-Delaware.gif", AssetManager.ACCESS_RANDOM));
+                        builder.from(getContext().getResources().getAssets().open("Animated-Flag-Delaware.gif", AssetManager.ACCESS_RANDOM));
                         break;
                     default:
                         throw new IndexOutOfBoundsException("Invalid source index");
                 }
-                gifImageView.setImageDrawable(gd);
+                gifImageView.setImageDrawable(builder.build());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

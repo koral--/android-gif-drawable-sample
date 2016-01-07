@@ -2,7 +2,6 @@ package pl.droidsonroids.gif.sample;
 
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;

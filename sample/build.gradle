@@ -35,13 +35,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        debug {
+            jniDebuggable true
+        }
     }
 }
 
 dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.squareup.okhttp:okhttp:2.7.2'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
     compile project(':android-gif-drawable')
     //compile 'pl.droidsonroids.gif:android-gif-drawable:+'
 }

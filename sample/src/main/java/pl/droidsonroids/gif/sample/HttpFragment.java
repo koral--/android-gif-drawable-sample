@@ -10,15 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-
 import java.io.IOException;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import pl.droidsonroids.gif.GifTextureView;
 import pl.droidsonroids.gif.InputSource;
 
@@ -47,7 +46,7 @@ public class HttpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mSnackbar!=null) {
+        if (mSnackbar != null) {
             mSnackbar.dismiss();
         }
     }
@@ -65,16 +64,17 @@ public class HttpFragment extends Fragment implements View.OnClickListener {
         final Call call = mOkHttpClient.newCall(new Request.Builder().url(URL).build());
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Request request, IOException e) {
+            public void onFailure(final Call call, final IOException e) {
                 mGifTextureView.setOnClickListener(HttpFragment.this);
-                mSnackbar = Snackbar.make(mGifTextureView, getString(R.string.gif_texture_view_loading_failed, e.getMessage()), Snackbar.LENGTH_INDEFINITE);
+                final String message = getString(R.string.gif_texture_view_loading_failed, e.getMessage());
+                mSnackbar = Snackbar.make(mGifTextureView, message, Snackbar.LENGTH_INDEFINITE);
                 mSnackbar.show();
             }
 
             @Override
-            public void onResponse(Response response) throws IOException {
+            public void onResponse(final Call call, final Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    onFailure(response.request(), new IOException(response.message()));
+                    onFailure(call, new IOException(response.message()));
                     return;
                 }
                 final ResponseBody body = response.body();

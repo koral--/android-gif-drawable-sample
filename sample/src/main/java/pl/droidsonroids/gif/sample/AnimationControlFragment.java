@@ -2,7 +2,6 @@ package pl.droidsonroids.gif.sample;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import pl.droidsonroids.gif.AnimationListener;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class AnimationControlFragment extends Fragment implements View.OnClickListener, AnimationListener {
+public class AnimationControlFragment extends BaseFragment implements View.OnClickListener, AnimationListener {
 
 	private GifDrawable gifDrawable;
 	private ToggleButton toggleButton;

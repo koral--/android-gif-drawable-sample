@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import okhttp3.ResponseBody;
 import pl.droidsonroids.gif.GifTextureView;
 import pl.droidsonroids.gif.InputSource;
 
-public class HttpFragment extends Fragment implements View.OnClickListener {
+public class HttpFragment extends BaseFragment implements View.OnClickListener {
 
     private static final String URL = "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif";
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
@@ -65,6 +64,9 @@ public class HttpFragment extends Fragment implements View.OnClickListener {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
+                if (isDetached()) {
+                    return;
+                }
                 mGifTextureView.setOnClickListener(HttpFragment.this);
                 final String message = getString(R.string.gif_texture_view_loading_failed, e.getMessage());
                 mSnackbar = Snackbar.make(mGifTextureView, message, Snackbar.LENGTH_INDEFINITE);
@@ -73,6 +75,9 @@ public class HttpFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onResponse(final Call call, final Response response) throws IOException {
+                if (isDetached()) {
+                    return;
+                }
                 if (!response.isSuccessful()) {
                     onFailure(call, new IOException(response.message()));
                     return;

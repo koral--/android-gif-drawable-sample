@@ -2,7 +2,6 @@ package pl.droidsonroids.gif.sample;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import java.io.IOException;
 
 import pl.droidsonroids.gif.GifDrawable;
 
-public class ImageSpanFragment extends Fragment implements Drawable.Callback {
+public class ImageSpanFragment extends BaseFragment implements Drawable.Callback {
 
     private TextView tv;
 

@@ -11,5 +11,5 @@
     <string name="animation_running">Animation running</string>
     <string name="animation_stopped">Animation stopped</string>
     <string name="toggle_label">Click button below to toggle animation</string>
-    <string name="animation_loop_completed">Animation loop #%1$d completed</string>
+    <string name="animation_loop_completed" tools:ignore="PluralsCandidate">Animation loop #%1$d completed</string>
 </resources>

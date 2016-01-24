@@ -1,2 +1,2 @@
 -dontwarn okio.**
--keepattributes Signature
+-keepattributes Signature, LineNumberTable

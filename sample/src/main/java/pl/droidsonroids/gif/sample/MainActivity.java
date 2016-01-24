@@ -1,10 +1,11 @@
 package pl.droidsonroids.gif.sample;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Main activity, hosts the pager
@@ -13,52 +14,18 @@ import android.support.v4.view.ViewPager;
  */
 public class MainActivity extends FragmentActivity {
 
+    private RefWatcher mRefWatcher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mRefWatcher = LeakCanary.install(getApplication());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ((ViewPager) findViewById(R.id.main_pager)).setAdapter(new MainPagerAdapter(this));
     }
 
-    static class MainPagerAdapter extends FragmentStatePagerAdapter {
-        private final String[] mPageTitles;
-
-        public MainPagerAdapter(FragmentActivity act) {
-            super(act.getSupportFragmentManager());
-            mPageTitles = act.getResources().getStringArray(R.array.pages);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new GifSourcesFragment();
-                case 1:
-                    return new GifTextViewFragment();
-                case 2:
-                    return new GifTextureFragment();
-                case 3:
-                    return new ImageSpanFragment();
-                case 4:
-                    return new AnimationControlFragment();
-                case 5:
-                    return new HttpFragment();
-                case 6:
-                    return new AboutFragment();
-                default:
-                    throw new IndexOutOfBoundsException("Invalid page index");
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return mPageTitles.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mPageTitles[position];
-        }
+    public RefWatcher getRefWatcher() {
+        return mRefWatcher;
     }
 
 }

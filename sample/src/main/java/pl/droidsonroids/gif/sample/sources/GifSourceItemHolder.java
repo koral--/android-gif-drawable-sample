@@ -8,12 +8,14 @@ import pl.droidsonroids.gif.GifImageView;
 import pl.droidsonroids.gif.sample.R;
 
 class GifSourceItemHolder extends RecyclerView.ViewHolder {
-    final GifImageView gifImageView;
+    final GifImageView gifImageViewOriginal;
+    final GifImageView gifImageViewSampled;
     final TextView descriptionTextView;
 
     public GifSourceItemHolder(View itemView) {
         super(itemView);
         descriptionTextView = (TextView) itemView.findViewById(R.id.desc_tv);
-        gifImageView = (GifImageView) itemView.findViewById(R.id.giv);
+        gifImageViewOriginal = (GifImageView) itemView.findViewById(R.id.image_original);
+        gifImageViewSampled = (GifImageView) itemView.findViewById(R.id.image_subsampled);
     }
 }

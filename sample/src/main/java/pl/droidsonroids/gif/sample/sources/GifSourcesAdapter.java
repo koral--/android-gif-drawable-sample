@@ -31,11 +31,16 @@ class GifSourcesAdapter extends RecyclerView.Adapter<GifSourceItemHolder> {
         position %= descriptions.length;
         holder.descriptionTextView.setText(descriptions[position]);
 
-        final GifDrawable existingDrawable = (GifDrawable) holder.gifImageView.getDrawable();
-        final GifDrawableBuilder builder = new GifDrawableBuilder().with(existingDrawable);
+        final GifDrawable existingOriginalDrawable = (GifDrawable) holder.gifImageViewOriginal.getDrawable();
+        final GifDrawable existingSampledDrawable = (GifDrawable) holder.gifImageViewSampled.getDrawable();
+        final GifDrawableBuilder builder = new GifDrawableBuilder().with(existingOriginalDrawable);
         try {
             mGifSourcesResolver.bindSource(position, builder);
-            holder.gifImageView.setImageDrawable(builder.build());
+            holder.gifImageViewOriginal.setImageDrawable(builder.build());
+
+            builder.with(existingSampledDrawable).sampleSize(3);
+            mGifSourcesResolver.bindSource(position, builder);
+            holder.gifImageViewSampled.setImageDrawable(builder.build());
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

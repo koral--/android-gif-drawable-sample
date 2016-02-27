@@ -47,7 +47,7 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta1'
     compile 'com.android.support:design:23.2.0'
     compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile project(':android-gif-drawable')
     //compile 'pl.droidsonroids.gif:android-gif-drawable:+'
 }

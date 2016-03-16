@@ -19,7 +19,7 @@ before_install:
   - export PATH=${PATH}:${ANDROID_NDK_HOME}
 
 script:
-  - ./gradlew build --info
+  - ./gradlew build
 
 after_failure:
   - cat build/outputs/lint-results.xml

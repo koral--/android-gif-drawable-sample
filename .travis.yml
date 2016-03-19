@@ -2,7 +2,7 @@ env:
   global:
     - NDK_VERSION=r11
     - MALLOC_ARENA_MAX=2
-sudo: false
+sudo: true
 language:
   - android
 jdk:

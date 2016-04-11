@@ -39,7 +39,17 @@ class GifSourcesAdapter extends RecyclerView.Adapter<GifSourceItemHolder> {
 		final GifDrawableBuilder builder = new GifDrawableBuilder().with(existingOriginalDrawable);
 		try {
 			mGifSourcesResolver.bindSource(position, builder);
-			holder.gifImageViewOriginal.setImageDrawable(builder.build());
+			final GifDrawable fullSizeDrawable = builder.build();
+			holder.gifImageViewOriginal.setImageDrawable(fullSizeDrawable);
+			holder.gifImageViewOriginal.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (fullSizeDrawable.isPlaying())
+						fullSizeDrawable.stop();
+					else
+						fullSizeDrawable.start();
+				}
+			});
 
 			builder.with(existingSampledDrawable).sampleSize(3);
 			mGifSourcesResolver.bindSource(position, builder);

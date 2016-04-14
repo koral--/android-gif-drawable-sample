@@ -54,7 +54,7 @@ public class HttpFragment extends BaseFragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH && !mGifTextureView.isHardwareAccelerated()) {
-            Snackbar.make(mGifTextureView, R.string.gif_texture_view_stub_acceleration, Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(mGifTextureView, R.string.gif_texture_view_stub_acceleration, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -69,7 +69,7 @@ public class HttpFragment extends BaseFragment implements View.OnClickListener {
                 }
                 mGifTextureView.setOnClickListener(HttpFragment.this);
                 final String message = getString(R.string.gif_texture_view_loading_failed, e.getMessage());
-                mSnackbar = Snackbar.make(mGifTextureView, message, Snackbar.LENGTH_INDEFINITE);
+                mSnackbar = Snackbar.make(mGifTextureView, message, Snackbar.LENGTH_LONG);
                 mSnackbar.show();
             }
 

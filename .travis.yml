@@ -2,9 +2,12 @@ env:
   global:
     - NDK_VERSION=r11c
     - MALLOC_ARENA_MAX=2
+
 sudo: true
+
 language:
   - android
+
 jdk:
   - oraclejdk8
 
@@ -21,6 +24,3 @@ before_install:
 
 script:
   - ./gradlew build --info
-
-after_failure:
-  - cat build/outputs/lint-results.xml

@@ -1,7 +1,9 @@
 package pl.droidsonroids.gif.sample;
 
+import android.content.pm.FeatureInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,15 +66,18 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		//TODO check if opengles 2 is supported
-		final GLSurfaceView view = (GLSurfaceView) inflater.inflate(R.layout.opengl, container, false);
-		view.setEGLContextClientVersion(2);
-		view.setRenderer(new Renderer());
 		try {
 			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		if (!isOpenGLES2Supported()) {
+			Snackbar.make(container, R.string.gles2_not_supported, Snackbar.LENGTH_LONG).show();
+			return null;
+		}
+		final GLSurfaceView view = (GLSurfaceView) inflater.inflate(R.layout.opengl, container, false);
+		view.setEGLContextClientVersion(2);
+		view.setRenderer(new Renderer());
 		mGifTexImage2D.startDecoderThread();
 		return view;
 	}
@@ -140,4 +145,17 @@ public class GifTexImage2DFragment extends BaseFragment {
 		fb.rewind();
 		return fb;
 	}
+
+	private boolean isOpenGLES2Supported() {
+		FeatureInfo[] featureInfos = getContext().getPackageManager().getSystemAvailableFeatures();
+		if (featureInfos != null) {
+			for (FeatureInfo featureInfo : featureInfos) {
+				if (featureInfo.name == null) {
+					return ((featureInfo.reqGlEsVersion & 0xffff0000) >> 16) >= 2;
+				}
+			}
+		}
+		return false;
+	}
+
 }

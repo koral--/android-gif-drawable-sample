@@ -22,9 +22,11 @@ import pl.droidsonroids.gif.InputSource;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.GL_VERTEX_SHADER;
 import static android.opengl.GLES20.glAttachShader;
 import static android.opengl.GLES20.glBindTexture;
@@ -38,6 +40,7 @@ import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glLinkProgram;
 import static android.opengl.GLES20.glShaderSource;
+import static android.opengl.GLES20.glTexImage2D;
 import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUseProgram;
@@ -115,6 +118,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 			glUniform1i(texture, 0);
 			glVertexAttribPointer(position, 2, GL_FLOAT, false, 0, verticesBuffer);
 			glEnableVertexAttribArray(position);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
 		}
 
 		@Override
@@ -124,7 +128,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
-			mGifTexImage2D.glTexImage2D();
+			mGifTexImage2D.glTexSubImage2D();
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
 	}

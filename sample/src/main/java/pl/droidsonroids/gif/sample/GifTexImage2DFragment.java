@@ -128,7 +128,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
-			mGifTexImage2D.glTexSubImage2D();
+			mGifTexImage2D.glTexSubImage2D(GL_TEXTURE_2D, 0);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		}
 	}

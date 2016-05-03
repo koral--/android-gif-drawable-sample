@@ -32,7 +32,6 @@ class GifSourcesAdapter extends RecyclerView.Adapter<GifSourceItemHolder> {
 	public void onBindViewHolder(final GifSourceItemHolder holder, int position) {
 		final String[] descriptions = holder.itemView.getResources().getStringArray(R.array.sources);
 		position %= descriptions.length;
-		holder.descriptionTextView.setText(descriptions[position]);
 
 		final GifDrawable existingOriginalDrawable = (GifDrawable) holder.gifImageViewOriginal.getDrawable();
 		final GifDrawable existingSampledDrawable = (GifDrawable) holder.gifImageViewSampled.getDrawable();

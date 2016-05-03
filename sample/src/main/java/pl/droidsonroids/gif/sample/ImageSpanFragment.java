@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.io.IOException;
-
 import pl.droidsonroids.gif.GifDrawable;
 
 public class ImageSpanFragment extends BaseFragment implements Drawable.Callback {
@@ -25,13 +23,9 @@ public class ImageSpanFragment extends BaseFragment implements Drawable.Callback
 			mTextView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 			mTextView.setTextIsSelectable(true);
 		}
-		final GifDrawable gifDrawable;
-		try {
-			gifDrawable = new GifDrawable(getResources(), R.drawable.anim_flag_england);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		final GifDrawable gifDrawable = GifDrawable.createFromResource(getResources(), R.drawable.anim_flag_england);
 		final SpannableStringBuilder ssb = new SpannableStringBuilder("test\ufffc");
+		assert gifDrawable != null;
 		gifDrawable.setBounds(0, 0, gifDrawable.getIntrinsicWidth(), gifDrawable.getIntrinsicHeight());
 		gifDrawable.setCallback(this);
 		ssb.setSpan(new ImageSpan(gifDrawable), ssb.length() - 1, ssb.length(), 0);

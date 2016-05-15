@@ -72,7 +72,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 		try {
 			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new IllegalStateException(e);
 		}
 		if (!isOpenGLES2Supported()) {
 			Snackbar.make(container, R.string.gles2_not_supported, Snackbar.LENGTH_LONG).show();
@@ -123,7 +123,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+			//no-op
 		}
 
 		@Override

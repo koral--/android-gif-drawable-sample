@@ -20,7 +20,8 @@ class GifSourcesResolver {
     private final AssetManager mAssetManager;
     private final Resources mResources;
     private final ContentResolver mContentResolver;
-    private final File mFileForUri, mFile;
+    private final File mFileForUri;
+    private final File mFile;
     private final String mFilePath;
     private final byte[] mByteArray;
     private final ByteBuffer mByteBuffer;
@@ -80,18 +81,18 @@ class GifSourcesResolver {
             File file = new File(context.getCacheDir(), filename);
             final AssetFileDescriptor assetFileDescriptor = context.getResources().getAssets().openFd(filename);
             FileInputStream input = assetFileDescriptor.createInputStream();
-            FileOutputStream output = new FileOutputStream(file);
             byte[] buf = new byte[(int) assetFileDescriptor.getDeclaredLength()];
             int bytesRead = input.read(buf);
             input.close();
             if (bytesRead != buf.length) {
-                throw new RuntimeException("Asset read failed");
+                throw new IOException("Asset read failed");
             }
+            FileOutputStream output = new FileOutputStream(file);
             output.write(buf, 0, bytesRead);
             output.close();
             return file;
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new IllegalStateException(ex);
         }
     }
 
@@ -107,7 +108,7 @@ class GifSourcesResolver {
             }
             return buf;
         } catch (IOException ex) {
-            throw new RuntimeException(ex);
+            throw new IllegalStateException(ex);
         }
     }
 }

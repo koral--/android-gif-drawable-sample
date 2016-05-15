@@ -45,7 +45,7 @@ class GifLoadTask extends FutureTask<ByteBuffer> {
 		try {
 			httpFragment.onGifDownloaded(get());
 		} catch (InterruptedException e) {
-			//no-op
+			Thread.currentThread().interrupt();
 		} catch (ExecutionException e) {
 			httpFragment.onDownloadFailed(e);
 		}

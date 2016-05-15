@@ -91,7 +91,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 		super.onDestroyView();
 	}
 
-	class Renderer implements GLSurfaceView.Renderer {
+	private class Renderer implements GLSurfaceView.Renderer {
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -133,14 +133,14 @@ public class GifTexImage2DFragment extends BaseFragment {
 		}
 	}
 
-	static int loadShader(int shaderType, String source) {
+	private static int loadShader(int shaderType, String source) {
 		int shader = glCreateShader(shaderType);
 		glShaderSource(shader, source);
 		glCompileShader(shader);
 		return shader;
 	}
 
-	static FloatBuffer createFloatBuffer(float[] floats) {
+	private static FloatBuffer createFloatBuffer(float[] floats) {
 		FloatBuffer fb = ByteBuffer
 				.allocateDirect(floats.length * 4)
 				.order(ByteOrder.nativeOrder())

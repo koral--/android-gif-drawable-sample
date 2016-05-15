@@ -1,8 +1,5 @@
 -keepattributes Signature, LineNumberTable
 
-#okhttp
--dontwarn okio.**
-
 #leakcanary
 -keep class org.eclipse.mat.** { *; } 
 -dontwarn com.squareup.haha.guava.** 

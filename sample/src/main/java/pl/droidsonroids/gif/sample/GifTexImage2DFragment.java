@@ -16,6 +16,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import pl.droidsonroids.gif.GifOptions;
 import pl.droidsonroids.gif.GifTexImage2D;
 import pl.droidsonroids.gif.InputSource;
 
@@ -70,7 +71,9 @@ public class GifTexImage2DFragment extends BaseFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		try {
-			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile));
+			GifOptions options = new GifOptions();
+			options.setInIsOpaque(true);
+			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile), options);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}

@@ -18,7 +18,7 @@ class GifSourcesAdapter extends RecyclerView.Adapter<GifSourceItemHolder> {
 
 	private final GifSourcesResolver mGifSourcesResolver;
 
-	public GifSourcesAdapter(final Context context) {
+	GifSourcesAdapter(final Context context) {
 		mGifSourcesResolver = new GifSourcesResolver(context);
 	}
 

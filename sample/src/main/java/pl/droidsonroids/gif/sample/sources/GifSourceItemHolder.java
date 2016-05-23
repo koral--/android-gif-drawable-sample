@@ -14,7 +14,7 @@ class GifSourceItemHolder extends RecyclerView.ViewHolder {
     final TextView descriptionTextView;
     final MultiCallback multiCallback;
 
-    public GifSourceItemHolder(View itemView) {
+    GifSourceItemHolder(View itemView) {
         super(itemView);
         descriptionTextView = (TextView) itemView.findViewById(R.id.desc_tv);
         gifImageViewOriginal = (GifImageView) itemView.findViewById(R.id.image_original);

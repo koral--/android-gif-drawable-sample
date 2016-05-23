@@ -26,7 +26,7 @@ class GifSourcesResolver {
     private final byte[] mByteArray;
     private final ByteBuffer mByteBuffer;
 
-    public GifSourcesResolver(Context context) {
+    GifSourcesResolver(Context context) {
         mResources = context.getResources();
         mContentResolver = context.getContentResolver();
         mAssetManager = mResources.getAssets();

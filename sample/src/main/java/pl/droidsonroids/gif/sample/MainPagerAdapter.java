@@ -9,7 +9,7 @@ import pl.droidsonroids.gif.sample.sources.GifSourcesFragment;
 class MainPagerAdapter extends FragmentStatePagerAdapter {
 	private final String[] mPageTitles;
 
-	public MainPagerAdapter(FragmentActivity act) {
+	MainPagerAdapter(FragmentActivity act) {
 		super(act.getSupportFragmentManager());
 		mPageTitles = act.getResources().getStringArray(R.array.pages);
 	}

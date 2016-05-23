@@ -34,6 +34,7 @@ import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glCompileShader;
 import static android.opengl.GLES20.glCreateProgram;
 import static android.opengl.GLES20.glCreateShader;
+import static android.opengl.GLES20.glDeleteShader;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
 import static android.opengl.GLES20.glGenTextures;
@@ -109,6 +110,8 @@ public class GifTexImage2DFragment extends BaseFragment {
 			glAttachShader(program, vertexShader);
 			glAttachShader(program, pixelShader);
 			glLinkProgram(program);
+			glDeleteShader(pixelShader);
+			glDeleteShader(vertexShader);
 			int position = glGetAttribLocation(program, "position");
 			int texture = glGetUniformLocation(program, "texture");
 			int coordinate = glGetAttribLocation(program, "coordinate");

@@ -24,7 +24,7 @@ public class MainActivity extends FragmentActivity {
         ((ViewPager) findViewById(R.id.main_pager)).setAdapter(new MainPagerAdapter(this));
     }
 
-    public RefWatcher getRefWatcher() {
+    RefWatcher getRefWatcher() {
         return mRefWatcher;
     }
 

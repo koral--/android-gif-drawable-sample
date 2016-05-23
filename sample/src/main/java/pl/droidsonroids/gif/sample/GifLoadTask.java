@@ -15,7 +15,7 @@ class GifLoadTask extends FutureTask<ByteBuffer> {
 	private static final String GIF_URL = "https://raw.githubusercontent.com/koral--/android-gif-drawable-sample/cb2d1f42b3045b2790a886d1574d3e74281de743/sample/src/main/assets/Animated-Flag-Hungary.gif";
 	private final WeakReference<HttpFragment> mFragmentReference;
 
-	public GifLoadTask(HttpFragment httpFragment) {
+	GifLoadTask(HttpFragment httpFragment) {
 		super(new Callable<ByteBuffer>() {
 			@Override
 			public ByteBuffer call() throws Exception {

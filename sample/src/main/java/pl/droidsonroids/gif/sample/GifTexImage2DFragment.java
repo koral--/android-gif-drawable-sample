@@ -61,7 +61,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 					"}";
 
 	private static final String FRAGMENT_SHADER_CODE =
-			"varying vec2 textureCoordinate;" +
+			"varying mediump vec2 textureCoordinate;" +
 					"uniform sampler2D texture;" +
 					"void main() { " +
 					"    gl_FragColor = texture2D(texture, textureCoordinate);" +

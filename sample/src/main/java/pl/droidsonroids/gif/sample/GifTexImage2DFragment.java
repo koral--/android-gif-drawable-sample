@@ -2,6 +2,7 @@ package pl.droidsonroids.gif.sample;
 
 import android.content.pm.FeatureInfo;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -9,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -20,12 +21,15 @@ import pl.droidsonroids.gif.GifOptions;
 import pl.droidsonroids.gif.GifTexImage2D;
 import pl.droidsonroids.gif.InputSource;
 
+import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.GL_LINEAR;
 import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
 import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
+import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
 import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.GL_VERTEX_SHADER;
@@ -45,6 +49,7 @@ import static android.opengl.GLES20.glShaderSource;
 import static android.opengl.GLES20.glTexImage2D;
 import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
 import static android.opengl.GLES20.glVertexAttribPointer;
 
@@ -52,12 +57,14 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	private static final String VERTEX_SHADER_CODE =
 			"attribute vec4 position;" +
+					"uniform mediump mat4 texMatrix;" +
 					"attribute vec4 coordinate;" +
 					"varying vec2 textureCoordinate;" +
 					"void main()" +
 					"{" +
 					"    gl_Position = position;" +
-					"    textureCoordinate = vec2(coordinate.s, 1.0 - coordinate.t);" +
+					"    mediump vec4 outCoordinate = texMatrix * coordinate;" +
+					"    textureCoordinate = vec2(outCoordinate.s, 1.0 - outCoordinate.t);" +
 					"}";
 
 	private static final String FRAGMENT_SHADER_CODE =
@@ -97,12 +104,17 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	private class Renderer implements GLSurfaceView.Renderer {
 
+		private int mTexMatrixLocation;
+		final float[] mTexMatrix = new float[16];
+
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			int[] texNames = {0};
+			final int[] texNames = {0};
 			glGenTextures(1, texNames, 0);
 			glBindTexture(GL_TEXTURE_2D, texNames[0]);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 			final int vertexShader = loadShader(GL_VERTEX_SHADER, VERTEX_SHADER_CODE);
 			final int pixelShader = loadShader(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_CODE);
@@ -112,24 +124,30 @@ public class GifTexImage2DFragment extends BaseFragment {
 			glLinkProgram(program);
 			glDeleteShader(pixelShader);
 			glDeleteShader(vertexShader);
-			int position = glGetAttribLocation(program, "position");
-			int texture = glGetUniformLocation(program, "texture");
-			int coordinate = glGetAttribLocation(program, "coordinate");
+			final int positionLocation = glGetAttribLocation(program, "position");
+			final int textureLocation = glGetUniformLocation(program, "texture");
+			mTexMatrixLocation = glGetUniformLocation(program, "texMatrix");
+			final int coordinateLocation = glGetAttribLocation(program, "coordinate");
 			glUseProgram(program);
 
-			FloatBuffer textureBuffer = createFloatBuffer(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
-			FloatBuffer verticesBuffer = createFloatBuffer(new float[]{-1, -1, 1, -1, -1, 1, 1, 1});
-			glVertexAttribPointer(coordinate, 2, GL_FLOAT, false, 0, textureBuffer);
-			glEnableVertexAttribArray(coordinate);
-			glUniform1i(texture, 0);
-			glVertexAttribPointer(position, 2, GL_FLOAT, false, 0, verticesBuffer);
-			glEnableVertexAttribArray(position);
+			Buffer textureBuffer = createFloatBuffer(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
+			Buffer verticesBuffer = createFloatBuffer(new float[]{-1, -1, 1, -1, -1, 1, 1, 1});
+			glVertexAttribPointer(coordinateLocation, 2, GL_FLOAT, false, 0, textureBuffer);
+			glEnableVertexAttribArray(coordinateLocation);
+			glUniform1i(textureLocation, 0);
+			glVertexAttribPointer(positionLocation, 2, GL_FLOAT, false, 0, verticesBuffer);
+			glEnableVertexAttribArray(positionLocation);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
 		}
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			//no-op
+			final float scaleX = (float) width / mGifTexImage2D.getWidth();
+			final float scaleY = (float) height / mGifTexImage2D.getHeight();
+			Matrix.setIdentityM(mTexMatrix, 0);
+			Matrix.scaleM(mTexMatrix, 0, scaleX, scaleY, 1);
+			Matrix.translateM(mTexMatrix, 0, (1 / scaleX) / 2 - 0.5f, (1 / scaleY) / 2 - 0.5f, 0);
+			glUniformMatrix4fv(mTexMatrixLocation, 1, false, mTexMatrix, 0);
 		}
 
 		@Override
@@ -140,20 +158,19 @@ public class GifTexImage2DFragment extends BaseFragment {
 	}
 
 	private static int loadShader(int shaderType, String source) {
-		int shader = glCreateShader(shaderType);
+		final int shader = glCreateShader(shaderType);
 		glShaderSource(shader, source);
 		glCompileShader(shader);
 		return shader;
 	}
 
-	private static FloatBuffer createFloatBuffer(float[] floats) {
-		FloatBuffer fb = ByteBuffer
+	private static Buffer createFloatBuffer(float[] floats) {
+		return ByteBuffer
 				.allocateDirect(floats.length * 4)
 				.order(ByteOrder.nativeOrder())
-				.asFloatBuffer();
-		fb.put(floats);
-		fb.rewind();
-		return fb;
+				.asFloatBuffer()
+				.put(floats)
+				.rewind();
 	}
 
 	private boolean isOpenGLES2Supported() {

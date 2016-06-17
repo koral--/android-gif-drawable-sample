@@ -1,7 +1,6 @@
 package pl.droidsonroids.gif.sample;
 
 import android.content.pm.FeatureInfo;
-import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.io.IOException;
 import java.nio.Buffer;
@@ -66,7 +64,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 					"{" +
 					"    gl_Position = position;" +
 					"    mediump vec4 outCoordinate = texMatrix * coordinate;" +
-					"    textureCoordinate = vec2(1.0 - outCoordinate.s, 1.0 - outCoordinate.t);" +
+					"    textureCoordinate = vec2(outCoordinate.s, 1.0 - outCoordinate.t);" +
 					"}";
 
 	private static final String FRAGMENT_SHADER_CODE =
@@ -83,7 +81,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 		try {
 			GifOptions options = new GifOptions();
 			options.setInIsOpaque(true);
-			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.rot2), options);
+			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile), options);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
@@ -95,10 +93,6 @@ public class GifTexImage2DFragment extends BaseFragment {
 		view.setEGLContextClientVersion(2);
 		view.setRenderer(new Renderer());
 		mGifTexImage2D.startDecoderThread();
-/*		ImageView imageView = new ImageView(getContext());
-		imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-		imageView.setImageResource(R.drawable.rot2);
-		return imageView;*/
 		return view;
 	}
 
@@ -111,8 +105,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 	private class Renderer implements GLSurfaceView.Renderer {
 
 		private int mTexMatrixLocation;
-		private int coordinateLocation;
-		final float[] transformMatrix = new float[16];
+		final float[] mTexMatrix = new float[16];
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -134,10 +127,12 @@ public class GifTexImage2DFragment extends BaseFragment {
 			final int positionLocation = glGetAttribLocation(program, "position");
 			final int textureLocation = glGetUniformLocation(program, "texture");
 			mTexMatrixLocation = glGetUniformLocation(program, "texMatrix");
-			coordinateLocation = glGetAttribLocation(program, "coordinate");
+			final int coordinateLocation = glGetAttribLocation(program, "coordinate");
 			glUseProgram(program);
 
-			Buffer verticesBuffer = createFloatBuffer(-1, -1, 1, -1, -1, 1, 1, 1);
+			Buffer textureBuffer = createFloatBuffer(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
+			Buffer verticesBuffer = createFloatBuffer(new float[]{-1, -1, 1, -1, -1, 1, 1, 1});
+			glVertexAttribPointer(coordinateLocation, 2, GL_FLOAT, false, 0, textureBuffer);
 			glEnableVertexAttribArray(coordinateLocation);
 			glUniform1i(textureLocation, 0);
 			glVertexAttribPointer(positionLocation, 2, GL_FLOAT, false, 0, verticesBuffer);
@@ -147,37 +142,12 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			float imageWidth = mGifTexImage2D.getWidth();
-			float imageHeight = mGifTexImage2D.getHeight();
-			final float factor = (imageWidth - imageHeight) / imageWidth;
-			final float v;
-			if (height > width) {
-				v = 1f - factor * 0.5f;
-			} else {
-				v = 0.5f + factor * 0.5f;
-			}
-			Buffer textureBuffer = createFloatBuffer(
-					0, 0,
-					1, 0,
-					0, 1,
-					1, 1
-
-			);
-			glVertexAttribPointer(coordinateLocation, 2, GL_FLOAT, false, 0, textureBuffer);
-
-			final PointF scale = new PointF(1, 1);
-			final PointF translation = new PointF();
-			if (imageWidth > imageHeight) {
-				scale.x = imageHeight / imageWidth;
-				translation.x = (1 / scale.x - 1) / 2;
-			} else {
-				scale.y = imageWidth / imageHeight;
-				translation.y = (1 / scale.y - 1) / 2;
-			}
-			Matrix.setIdentityM(transformMatrix, 0);
-//			Matrix.scaleM(transformMatrix, 0, scale.x, scale.y, 1);
-//			Matrix.translateM(transformMatrix, 0, translation.x, translation.y, 0);
-			glUniformMatrix4fv(mTexMatrixLocation, 1, false, transformMatrix, 0);
+			final float scaleX = (float) width / mGifTexImage2D.getWidth();
+			final float scaleY = (float) height / mGifTexImage2D.getHeight();
+			Matrix.setIdentityM(mTexMatrix, 0);
+			Matrix.scaleM(mTexMatrix, 0, scaleX, scaleY, 1);
+			Matrix.translateM(mTexMatrix, 0, (1 / scaleX) / 2 - 0.5f, (1 / scaleY) / 2 - 0.5f, 0);
+			glUniformMatrix4fv(mTexMatrixLocation, 1, false, mTexMatrix, 0);
 		}
 
 		@Override
@@ -194,7 +164,7 @@ public class GifTexImage2DFragment extends BaseFragment {
 		return shader;
 	}
 
-	private static Buffer createFloatBuffer(float... floats) {
+	private static Buffer createFloatBuffer(float[] floats) {
 		return ByteBuffer
 				.allocateDirect(floats.length * 4)
 				.order(ByteOrder.nativeOrder())

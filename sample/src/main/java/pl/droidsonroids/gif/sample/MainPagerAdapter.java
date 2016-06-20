@@ -18,18 +18,18 @@ class MainPagerAdapter extends FragmentStatePagerAdapter {
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
-//				return new GifSourcesFragment();
-//			case 1:
-//				return new GifTextViewFragment();
-//			case 2:
-//				return new GifTextureFragment();
-//			case 3:
-//				return new ImageSpanFragment();
-//			case 4:
-//				return new AnimationControlFragment();
-//			case 5:
-//				return new HttpFragment();
-//			case 6:
+				return new GifSourcesFragment();
+			case 1:
+				return new GifTextViewFragment();
+			case 2:
+				return new GifTextureFragment();
+			case 3:
+				return new ImageSpanFragment();
+			case 4:
+				return new AnimationControlFragment();
+			case 5:
+				return new HttpFragment();
+			case 6:
 				return new GifTexImage2DFragment();
 			case 7:
 				return new AboutFragment();
@@ -40,7 +40,7 @@ class MainPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return 1;
+		return mPageTitles.length;
 	}
 
 	@Override

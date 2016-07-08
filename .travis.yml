@@ -1,6 +1,6 @@
 env:
   global:
-    - NDK_VERSION=r12
+    - NDK_VERSION=r12b
     - MALLOC_ARENA_MAX=2
 
 sudo: true

@@ -78,16 +78,16 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (!isOpenGLES2Supported()) {
+			Snackbar.make(container, R.string.gles2_not_supported, Snackbar.LENGTH_LONG).show();
+			return null;
+		}
 		try {
 			GifOptions options = new GifOptions();
 			options.setInIsOpaque(true);
 			mGifTexImage2D = new GifTexImage2D(new InputSource.ResourcesSource(getResources(), R.drawable.anim_flag_chile), options);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
-		}
-		if (!isOpenGLES2Supported()) {
-			Snackbar.make(container, R.string.gles2_not_supported, Snackbar.LENGTH_LONG).show();
-			return null;
 		}
 		final GLSurfaceView view = (GLSurfaceView) inflater.inflate(R.layout.opengl, container, false);
 		view.setEGLContextClientVersion(2);
@@ -98,7 +98,9 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	@Override
 	public void onDestroyView() {
-		mGifTexImage2D.recycle();
+		if (mGifTexImage2D!=null) {
+			mGifTexImage2D.recycle();
+		}
 		super.onDestroyView();
 	}
 

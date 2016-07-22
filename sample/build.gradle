@@ -6,7 +6,7 @@ repositories {
 
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.0'
+    buildToolsVersion '24.0.1'
 
     defaultConfig {
         minSdkVersion 8
@@ -46,8 +46,8 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile 'com.android.support:design:24.0.0'
-    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.1.0'
+    compile 'com.android.support:appcompat-v7:24.1.0'
     compile project(':android-gif-drawable')
     //compile 'pl.droidsonroids.gif:android-gif-drawable:+'
 }

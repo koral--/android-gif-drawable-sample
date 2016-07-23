@@ -1,15 +1,11 @@
-//noinspection GradleCompatible
 apply plugin: 'com.android.application'
-repositories {
-    jcenter()
-}
 
 android {
     compileSdkVersion 24
     buildToolsVersion '24.0.1'
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 24
         versionCode 1
         versionName '1.0'
@@ -42,12 +38,16 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    compile 'com.android.support:design:24.1.0'
-    compile 'com.android.support:appcompat-v7:24.1.0'
+    compile 'com.android.support:design:24.1.1'
+    compile 'com.android.support:appcompat-v7:24.1.1'
     compile project(':android-gif-drawable')
     //compile 'pl.droidsonroids.gif:android-gif-drawable:+'
 }

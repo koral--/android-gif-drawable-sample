@@ -92,16 +92,17 @@ public class GifTexImage2DFragment extends BaseFragment {
 		final GLSurfaceView view = (GLSurfaceView) inflater.inflate(R.layout.opengl, container, false);
 		view.setEGLContextClientVersion(2);
 		view.setRenderer(new Renderer());
+		view.getHolder().setFixedSize(mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight());
 		mGifTexImage2D.startDecoderThread();
 		return view;
 	}
 
 	@Override
-	public void onDestroyView() {
-		if (mGifTexImage2D!=null) {
+	public void onDetach() {
+		super.onDetach();
+		if (mGifTexImage2D != null) {
 			mGifTexImage2D.recycle();
 		}
-		super.onDestroyView();
 	}
 
 	private class Renderer implements GLSurfaceView.Renderer {

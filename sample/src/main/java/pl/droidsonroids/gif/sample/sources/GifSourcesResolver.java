@@ -66,7 +66,7 @@ class GifSourcesResolver {
                 builder.from(mByteBuffer);
                 break;
             case 8: //Uri
-                builder.from(mContentResolver, Uri.parse("file:///" + mFileForUri.getAbsolutePath()));
+                builder.from(mContentResolver, Uri.parse("file:///" + mFileForUri.getPath()));
                 break;
             case 9: //InputStream
                 builder.from(mAssetManager.open("Animated-Flag-Delaware.gif", AssetManager.ACCESS_RANDOM));

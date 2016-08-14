@@ -4,6 +4,7 @@ import android.content.pm.FeatureInfo;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,33 +22,22 @@ import pl.droidsonroids.gif.GifOptions;
 import pl.droidsonroids.gif.GifTexImage2D;
 import pl.droidsonroids.gif.InputSource;
 
-import static android.opengl.GLES20.GL_CLAMP_TO_EDGE;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
-import static android.opengl.GLES20.GL_LINEAR;
-import static android.opengl.GLES20.GL_RGBA;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
-import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
-import static android.opengl.GLES20.GL_TEXTURE_WRAP_S;
-import static android.opengl.GLES20.GL_TEXTURE_WRAP_T;
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
-import static android.opengl.GLES20.GL_UNSIGNED_BYTE;
 import static android.opengl.GLES20.GL_VERTEX_SHADER;
 import static android.opengl.GLES20.glAttachShader;
-import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glCompileShader;
 import static android.opengl.GLES20.glCreateProgram;
 import static android.opengl.GLES20.glCreateShader;
 import static android.opengl.GLES20.glDeleteShader;
 import static android.opengl.GLES20.glDrawArrays;
 import static android.opengl.GLES20.glEnableVertexAttribArray;
-import static android.opengl.GLES20.glGenTextures;
 import static android.opengl.GLES20.glGetAttribLocation;
 import static android.opengl.GLES20.glGetUniformLocation;
 import static android.opengl.GLES20.glLinkProgram;
 import static android.opengl.GLES20.glShaderSource;
-import static android.opengl.GLES20.glTexImage2D;
-import static android.opengl.GLES20.glTexParameteri;
 import static android.opengl.GLES20.glUniform1i;
 import static android.opengl.GLES20.glUniformMatrix4fv;
 import static android.opengl.GLES20.glUseProgram;
@@ -57,13 +47,14 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	private static final String VERTEX_SHADER_CODE =
 			"attribute vec4 position;" +
-					"uniform mediump mat4 texMatrix;" +
+					"uniform mediump mat4 projection;" +
+					"uniform mediump mat4 model;" +
 					"attribute vec4 coordinate;" +
 					"varying vec2 textureCoordinate;" +
 					"void main()" +
 					"{" +
 					"    gl_Position = position;" +
-					"    mediump vec4 outCoordinate = texMatrix * coordinate;" +
+					"    mediump vec4 outCoordinate = projection * model * coordinate;" +
 					"    textureCoordinate = vec2(outCoordinate.s, 1.0 - outCoordinate.t);" +
 					"}";
 
@@ -92,7 +83,8 @@ public class GifTexImage2DFragment extends BaseFragment {
 		final GLSurfaceView view = (GLSurfaceView) inflater.inflate(R.layout.opengl, container, false);
 		view.setEGLContextClientVersion(2);
 		view.setRenderer(new Renderer());
-		view.getHolder().setFixedSize(mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight());
+		final int size = Math.max(mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight());
+		view.getHolder().setFixedSize(size, size);
 		mGifTexImage2D.startDecoderThread();
 		return view;
 	}
@@ -107,17 +99,19 @@ public class GifTexImage2DFragment extends BaseFragment {
 
 	private class Renderer implements GLSurfaceView.Renderer {
 
-		private int mTexMatrixLocation;
-		final float[] mTexMatrix = new float[16];
+		private int mProjectionLocation;
+		private int mModelLocation;
+		final float[] mModel = new float[16];
+		final float[] mProjection = new float[16];
 
 		@Override
 		public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-			final int[] texNames = {0};
-			glGenTextures(1, texNames, 0);
-			glBindTexture(GL_TEXTURE_2D, texNames[0]);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//			final int[] texNames = {0};
+//			glGenTextures(1, texNames, 0);
+//			glBindTexture(GL_TEXTURE_2D, texNames[0]);
+//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 			final int vertexShader = loadShader(GL_VERTEX_SHADER, VERTEX_SHADER_CODE);
 			final int pixelShader = loadShader(GL_FRAGMENT_SHADER, FRAGMENT_SHADER_CODE);
@@ -129,7 +123,8 @@ public class GifTexImage2DFragment extends BaseFragment {
 			glDeleteShader(vertexShader);
 			final int positionLocation = glGetAttribLocation(program, "position");
 			final int textureLocation = glGetUniformLocation(program, "texture");
-			mTexMatrixLocation = glGetUniformLocation(program, "texMatrix");
+			mModelLocation = glGetUniformLocation(program, "model");
+			mProjectionLocation = glGetUniformLocation(program, "projection");
 			final int coordinateLocation = glGetAttribLocation(program, "coordinate");
 			glUseProgram(program);
 
@@ -140,23 +135,27 @@ public class GifTexImage2DFragment extends BaseFragment {
 			glUniform1i(textureLocation, 0);
 			glVertexAttribPointer(positionLocation, 2, GL_FLOAT, false, 0, verticesBuffer);
 			glEnableVertexAttribArray(positionLocation);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, mGifTexImage2D.getWidth(), mGifTexImage2D.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
 		}
 
 		@Override
 		public void onSurfaceChanged(GL10 gl, int width, int height) {
-			final float scaleX = (float) width / mGifTexImage2D.getWidth();
-			final float scaleY = (float) height / mGifTexImage2D.getHeight();
-			Matrix.setIdentityM(mTexMatrix, 0);
-			Matrix.scaleM(mTexMatrix, 0, scaleX, scaleY, 1);
-			Matrix.translateM(mTexMatrix, 0, (1 / scaleX) / 2 - 0.5f, (1 / scaleY) / 2 - 0.5f, 0);
-			glUniformMatrix4fv(mTexMatrixLocation, 1, false, mTexMatrix, 0);
+			Matrix.setIdentityM(mProjection, 0);
+			Matrix.orthoM(mProjection, 0, 0, 1, 0, 1, -1, 1);
+
+			Matrix.setIdentityM(mModel, 0);
+			Matrix.translateM(mModel, 0, 0.5f, 0.5f, 0);
+			Matrix.scaleM(mModel, 0, 0.5f, 0.5f, 1);
+
+			glUniformMatrix4fv(mProjectionLocation, 1, false, mProjection, 0);
+			glUniformMatrix4fv(mModelLocation, 1, false, mModel, 0);
 		}
 
 		@Override
 		public void onDrawFrame(GL10 gl) {
-			mGifTexImage2D.glTexSubImage2D(GL_TEXTURE_2D, 0);
+			mGifTexImage2D.renderFrame(GL_TEXTURE_2D, 0);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			SystemClock.sleep(300);
 		}
 	}
 

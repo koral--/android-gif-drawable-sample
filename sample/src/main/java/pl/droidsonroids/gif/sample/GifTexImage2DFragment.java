@@ -22,6 +22,9 @@ import pl.droidsonroids.gif.GifOptions;
 import pl.droidsonroids.gif.GifTexImage2D;
 import pl.droidsonroids.gif.InputSource;
 
+import static android.opengl.GLES10.glClear;
+import static android.opengl.GLES10.glClearColor;
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
@@ -155,7 +158,6 @@ public class GifTexImage2DFragment extends BaseFragment {
 		public void onDrawFrame(GL10 gl) {
 			mGifTexImage2D.renderFrame(GL_TEXTURE_2D, 0);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-			SystemClock.sleep(300);
 		}
 	}
 

@@ -1,7 +1,6 @@
 android-gif-drawable-sample
 ===========================
 
-Sample project for [android-gif-drawable](https://github.com/koral--/android-gif-drawable) library.
+Sample project for [android-gif-drawable](https://github.com/koral--/android-gif-drawable) library is now integrated with [library repository](https://github.com/koral--/android-gif-drawable/tree/master/) as a **sample** module.
 
-Used icons are either public domain, created by Dave Johnston or licensed under CC, GFDL available on
-[Wikimedia Commons](https://commons.wikimedia.org)
+This repo is preserved for archival purposes only.
